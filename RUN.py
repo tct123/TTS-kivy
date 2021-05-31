@@ -1,6 +1,4 @@
 import os
-
-
 import kivy
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
@@ -8,7 +6,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.app import App
 from kivy.core.audio import SoundLoader
 import pyttsx3
-
+import pygame
+from pygame import mixer
+mixer.init()
 engine = pyttsx3.init()
 kivy.require('2.0.0')
 
@@ -23,7 +23,7 @@ class ttsApp(App):
 
         self.ti = TextInput(height=.9)
         self.sound = SoundLoader.load('converted.wav')
-        self.time = None
+
         convertbutton = Button(text='Convert',on_press = self.convert)
         pausebutton = Button(text='Pause', on_press = self.f_pause)
         playbutton = Button(text='Play', on_press = self.f_play)
@@ -37,15 +37,21 @@ class ttsApp(App):
         return mbl
 
     def convert(self, obj):
+        if self.sound != None:
+            self.sound.stop()
+            self.sound.unload()
+
         engine.save_to_file(self.ti.text,'converted.wav')
         engine.runAndWait()
-        self.sound = SoundLoader.load('converted.wav')
-        os.remove('converted.wav')
+
+        self.sound = mixer.music
+
+
 
 
     def f_pause(self, obj):
         if self.sound!=None:
-            self.sound.stop()
+            self.sound.pause()
 
 
 
@@ -55,6 +61,9 @@ class ttsApp(App):
 
 
 
+
 if __name__ == '__main__':
     app = ttsApp()
     app.run()
+
+
