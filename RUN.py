@@ -65,5 +65,3 @@ class ttsApp(App):
 if __name__ == '__main__':
     app = ttsApp()
     app.run()
-
-
